@@ -39,7 +39,7 @@ class TaskListFragment : Fragment() {
         view.findViewById<FloatingActionButton>(R.id.floatingActionButton).setOnClickListener {
             // Instanciation d'un objet task avec des données préremplies:
             taskList.add(Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}"))
-            recyclerView?.adapter = TaskListAdapter(taskList);
+            recyclerView?.adapter?.notifyDataSetChanged();
         }
     }
 }
