@@ -17,12 +17,16 @@ class TaskListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val rootView = inflater.inflate(R.layout.fragment_task_list, container, false)
+        return rootView;
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         // Pour une [RecyclerView] ayant l'id "recycler_view":
         var recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view);
         recyclerView?.layoutManager = LinearLayoutManager(activity);
         recyclerView?.adapter = TaskListAdapter(taskList);
-
-        val rootView = inflater.inflate(R.layout.fragment_task_list, container, false)
-        return rootView;
     }
 }
