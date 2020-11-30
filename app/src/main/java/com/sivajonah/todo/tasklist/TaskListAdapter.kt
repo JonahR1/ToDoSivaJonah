@@ -13,11 +13,15 @@ class TaskListAdapter(private val taskList: List<Task>) : RecyclerView.Adapter<T
         fun bind(taskTitle: Task) {
             itemView.apply { // `apply {}` permet d'éviter de répéter `itemView.*`
                 // TODO: afficher les données et attacher les listeners aux différentes vues de notre [itemView]
-                findViewById<TextView>(R.id.task_title).append(taskTitle.description);
+                findViewById<TextView>(R.id.task_title).setText(taskTitle.title);
+                findViewById<TextView>(R.id.task_description).setText(taskTitle.description);
                 findViewById<ImageButton>(R.id.imageButton).setOnClickListener {
                     // Utilisation de la lambda dans le ViewHolder:
                     onDeleteClickListener?.invoke(taskTitle)
                 }
+                /*findViewById<ImageButton>(R.id.editButton).setOnClickListener {
+
+                }*/
             }
         }
     }
