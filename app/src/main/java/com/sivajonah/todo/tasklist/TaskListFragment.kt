@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,6 +41,13 @@ class TaskListFragment : Fragment() {
         view.findViewById<FloatingActionButton>(R.id.floatingActionButton).setOnClickListener {
             // Instanciation d'un objet task avec des données préremplies:
             taskList.add(Task(id = UUID.randomUUID().toString(), title = "Task ${taskList.size + 1}"))
+            recyclerView?.adapter?.notifyDataSetChanged();
+        }
+
+        // "implémentation" de la lambda dans le fragment:
+        (recyclerView?.adapter as TaskListAdapter)?.onDeleteClickListener = { task ->
+            // Supprimer la tâche
+            taskList.remove(task);
             recyclerView?.adapter?.notifyDataSetChanged();
         }
     }
