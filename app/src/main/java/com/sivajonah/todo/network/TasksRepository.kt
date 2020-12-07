@@ -43,7 +43,7 @@ class TasksRepository {
     suspend fun deleteTask(task:Task) {
         val removedTask = tasksWebService.deleteTask(task.id)
         val editableList = _taskList.value.orEmpty().toMutableList()
-        editableList.remove(removedTask.body()!!)
+        editableList.remove(task)
         _taskList.value = editableList
     }
 }
