@@ -1,5 +1,6 @@
 package com.sivajonah.todo.tasklist
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,13 +9,18 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sivajonah.todo.R
+import com.sivajonah.todo.network.Api
+import com.sivajonah.todo.network.TasksRepository
 import com.sivajonah.todo.task.TaskActivity
-import com.sivajonah.todo.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
+import kotlinx.coroutines.launch
 import java.util.*
+import androidx.lifecycle.Observer
+import com.sivajonah.todo.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 
 class TaskListFragment : Fragment() {
     private val taskList = mutableListOf(
@@ -23,9 +29,23 @@ class TaskListFragment : Fragment() {
         Task(id = "id_3", title = "Task 3")
     )
 
+    private val tasksRepository = TasksRepository()
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val task = data!!.getSerializableExtra(TaskActivity.TASK_KEY) as Task
-        taskList.add(task)
+        if (requestCode == TaskActivity.ADD_TASK_REQUEST_CODE  && resultCode == Activity.RESULT_OK) {
+            val task = data!!.getSerializableExtra(TaskActivity.TASK_KEY) as Task
+            taskList.add(task)
+            lifecycleScope.launch {
+                tasksRepository.createTask(task)
+            }
+        } else if (requestCode == TaskActivity.EDIT_TASK_REQUEST_CODE  && resultCode == Activity.RESULT_OK) {
+            val task = data!!.getSerializableExtra(TaskActivity.TASK_KEY) as Task
+            val position = taskList.indexOfFirst { task.id == it.id }
+            taskList[position] = task
+            lifecycleScope.launch {
+                tasksRepository.updateTask(task)
+            }
+        }
         super.onActivityResult(requestCode, resultCode, data)
     }
 
@@ -61,6 +81,32 @@ class TaskListFragment : Fragment() {
             // Supprimer la tâche
             taskList.remove(task);
             recyclerView?.adapter?.notifyDataSetChanged();
+            lifecycleScope.launch {
+                tasksRepository.deleteTask(task)
+            }
         }
+
+        (recyclerView?.adapter as TaskListAdapter)?.onEditClickListener = { task ->
+            val intent = Intent(activity, TaskActivity::class.java)
+            intent.putExtra(TaskActivity.TASK_KEY, task)
+            startActivityForResult(intent, TaskActivity.EDIT_TASK_REQUEST_CODE)
+        }
+
+        tasksRepository.taskList.observe(viewLifecycleOwner, Observer {
+            taskList.clear()
+            taskList.addAll(it)
+            recyclerView?.adapter?.notifyDataSetChanged()
+        })
+    }
+
+    override fun onResume() {
+        // Ici on ne va pas gérer les cas d'erreur donc on force le crash avec "!!"
+        lifecycleScope.launch {
+            val userInfo = Api.userService.getInfo().body()!!
+            view?.findViewById<TextView>(R.id.textView)?.text = "${userInfo.firstName} ${userInfo.lastName}"
+            tasksRepository.refresh()
+        }
+
+        super.onResume()
     }
 }

@@ -1,12 +1,15 @@
 package com.sivajonah.todo.tasklist
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
 import com.sivajonah.todo.R
+import com.sivajonah.todo.task.TaskActivity
 
 class TaskListAdapter(private val taskList: List<Task>) : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -19,9 +22,9 @@ class TaskListAdapter(private val taskList: List<Task>) : RecyclerView.Adapter<T
                     // Utilisation de la lambda dans le ViewHolder:
                     onDeleteClickListener?.invoke(taskTitle)
                 }
-                /*findViewById<ImageButton>(R.id.editButton).setOnClickListener {
-
-                }*/
+                findViewById<ImageButton>(R.id.editButton).setOnClickListener {
+                    onEditClickListener?.invoke(taskTitle)
+                }
             }
         }
     }
@@ -42,4 +45,5 @@ class TaskListAdapter(private val taskList: List<Task>) : RecyclerView.Adapter<T
 
     // Déclaration de la variable lambda dans l'adapter:
     var onDeleteClickListener: ((Task) -> Unit)? = null
+    var onEditClickListener: ((Task) -> Unit)? = null
 }
