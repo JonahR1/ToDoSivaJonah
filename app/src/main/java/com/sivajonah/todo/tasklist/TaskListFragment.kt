@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,28 +24,23 @@ import androidx.lifecycle.Observer
 import com.sivajonah.todo.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 
 class TaskListFragment : Fragment() {
-    private val taskList = mutableListOf(
+    /*private val taskList = mutableListOf(
         Task(id = "id_1", title = "Task 1", description = "description 1"),
         Task(id = "id_2", title = "Task 2"),
         Task(id = "id_3", title = "Task 3")
-    )
+    )*/
 
-    private val tasksRepository = TasksRepository()
+    private val viewModel: TaskListViewModel by viewModels()
+    val adapter = TaskListAdapter()
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == TaskActivity.ADD_TASK_REQUEST_CODE  && resultCode == Activity.RESULT_OK) {
             val task = data!!.getSerializableExtra(TaskActivity.TASK_KEY) as Task
-            taskList.add(task)
-            lifecycleScope.launch {
-                tasksRepository.createTask(task)
-            }
+            viewModel.createTask(task)
         } else if (requestCode == TaskActivity.EDIT_TASK_REQUEST_CODE  && resultCode == Activity.RESULT_OK) {
             val task = data!!.getSerializableExtra(TaskActivity.TASK_KEY) as Task
-            val position = taskList.indexOfFirst { task.id == it.id }
-            taskList[position] = task
-            lifecycleScope.launch {
-                tasksRepository.updateTask(task)
-            }
+            viewModel.updateTask(task)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -65,7 +61,7 @@ class TaskListFragment : Fragment() {
         // Pour une [RecyclerView] ayant l'id "recycler_view":
         var recyclerView = view?.findViewById<RecyclerView>(R.id.recycler_view);
         recyclerView?.layoutManager = LinearLayoutManager(activity);
-        recyclerView?.adapter = TaskListAdapter(taskList);
+        recyclerView?.adapter = adapter
 
         view.findViewById<FloatingActionButton>(R.id.floatingActionButton).setOnClickListener {
             val intent = Intent(activity, TaskActivity::class.java)
@@ -77,25 +73,20 @@ class TaskListFragment : Fragment() {
         }
 
         // "implémentation" de la lambda dans le fragment:
-        (recyclerView?.adapter as TaskListAdapter)?.onDeleteClickListener = { task ->
-            // Supprimer la tâche
-            taskList.remove(task);
-            recyclerView?.adapter?.notifyDataSetChanged();
-            lifecycleScope.launch {
-                tasksRepository.deleteTask(task)
-            }
+        adapter.onDeleteClickListener = { task ->
+            viewModel.deleteTask(task)
+            adapter.notifyDataSetChanged()
         }
 
-        (recyclerView?.adapter as TaskListAdapter)?.onEditClickListener = { task ->
+        adapter.onEditClickListener = { task ->
             val intent = Intent(activity, TaskActivity::class.java)
             intent.putExtra(TaskActivity.TASK_KEY, task)
             startActivityForResult(intent, TaskActivity.EDIT_TASK_REQUEST_CODE)
         }
 
-        tasksRepository.taskList.observe(viewLifecycleOwner, Observer {
-            taskList.clear()
-            taskList.addAll(it)
-            recyclerView?.adapter?.notifyDataSetChanged()
+        viewModel.taskList.observe(viewLifecycleOwner, Observer {
+            adapter.taskList = it.toMutableList()
+            adapter.notifyDataSetChanged();
         })
     }
 
@@ -104,7 +95,7 @@ class TaskListFragment : Fragment() {
         lifecycleScope.launch {
             val userInfo = Api.userService.getInfo().body()!!
             view?.findViewById<TextView>(R.id.textView)?.text = "${userInfo.firstName} ${userInfo.lastName}"
-            tasksRepository.refresh()
+            viewModel.refresh()
         }
 
         super.onResume()
