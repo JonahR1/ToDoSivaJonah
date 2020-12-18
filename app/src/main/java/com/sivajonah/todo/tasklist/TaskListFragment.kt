@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,12 +16,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sivajonah.todo.R
 import com.sivajonah.todo.network.Api
-import com.sivajonah.todo.network.TasksRepository
 import com.sivajonah.todo.task.TaskActivity
 import kotlinx.coroutines.launch
-import java.util.*
 import androidx.lifecycle.Observer
+import coil.load
 import com.sivajonah.todo.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
+import com.sivajonah.todo.userinfo.UserInfoActivity
 
 class TaskListFragment : Fragment() {
     /*private val taskList = mutableListOf(
@@ -91,13 +91,31 @@ class TaskListFragment : Fragment() {
     }
 
     override fun onResume() {
+        super.onResume()
+
         // Ici on ne va pas gérer les cas d'erreur donc on force le crash avec "!!"
         lifecycleScope.launch {
-            val userInfo = Api.userService.getInfo().body()!!
+            val userInfo = Api.userWebService.getInfo().body()!!
             view?.findViewById<TextView>(R.id.textView)?.text = "${userInfo.firstName} ${userInfo.lastName}"
             viewModel.refresh()
         }
 
-        super.onResume()
+        val imageView = view?.findViewById<ImageView>(R.id.imageView)
+
+        imageView?.load("https://goo.gl/gEgYUd")
+/*        val bitmap = imageView?.getDrawable()!!.toBitmap()
+        val imageRounded = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
+        val canvas = Canvas(imageRounded)
+        val paint = Paint()
+        paint.isAntiAlias = true
+        paint.shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        canvas.drawRoundRect(RectF(10F, 10F, bitmap.width.toFloat(), bitmap.height.toFloat()),
+            200F, 200F, paint) // Round Image Corner 100 100 100 100
+        imageView.setImageBitmap(imageRounded)*/
+
+        imageView?.setOnClickListener {
+            startActivity(Intent(activity, UserInfoActivity::class.java))
+        }
+
     }
 }
