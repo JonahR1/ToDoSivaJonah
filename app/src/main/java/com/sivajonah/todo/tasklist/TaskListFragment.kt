@@ -28,12 +28,6 @@ import com.sivajonah.todo.userinfo.UserInfoViewModel
 import okhttp3.internal.wait
 
 class TaskListFragment : Fragment() {
-    /*private val taskList = mutableListOf(
-        Task(id = "id_1", title = "Task 1", description = "description 1"),
-        Task(id = "id_2", title = "Task 2"),
-        Task(id = "id_3", title = "Task 3")
-    )*/
-
     private val taskListViewModel: TaskListViewModel by viewModels()
     private val userInfoViewModel: UserInfoViewModel by viewModels()
     val adapter = TaskListAdapter()
@@ -106,8 +100,6 @@ class TaskListFragment : Fragment() {
 
         userInfoViewModel.userInfo.observe(viewLifecycleOwner, Observer {
             view?.findViewById<TextView>(R.id.textView)?.text = "${userInfoViewModel.userInfo.value?.firstName} ${userInfoViewModel.userInfo.value?.lastName}"
-
-            println(userInfoViewModel.userInfo.value?.avatar)
 
             imageView?.load(userInfoViewModel.userInfo.value?.avatar) {
                 transformations(CircleCropTransformation())
