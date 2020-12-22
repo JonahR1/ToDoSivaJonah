@@ -30,7 +30,7 @@ import okhttp3.internal.wait
 class TaskListFragment : Fragment() {
     private val taskListViewModel: TaskListViewModel by viewModels()
     private val userInfoViewModel: UserInfoViewModel by viewModels()
-    val adapter = TaskListAdapter()
+    private val adapter = TaskListAdapter()
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -98,12 +98,20 @@ class TaskListFragment : Fragment() {
             userInfoViewModel.getInfo()!!
         }
 
-        userInfoViewModel.userInfo.observe(viewLifecycleOwner, Observer {
-            view?.findViewById<TextView>(R.id.textView)?.text = "${userInfoViewModel.userInfo.value?.firstName} ${userInfoViewModel.userInfo.value?.lastName}"
+        userInfoViewModel.userInfo.observe(viewLifecycleOwner, Observer { userInfo ->
+            view?.findViewById<TextView>(R.id.textView)?.text = "${userInfo.firstName} ${userInfo.lastName}"
 
-            imageView?.load(userInfoViewModel.userInfo.value?.avatar) {
+            imageView?.load(userInfo.avatar) {
                 transformations(CircleCropTransformation())
                 size(400)
+            }
+
+            // au cas ou l'image download ne fonctionne pas
+            if(imageView?.drawable == null) {
+                imageView?.load("https://goo.gl/gEgYUd") {
+                    transformations(CircleCropTransformation())
+                    size(250)
+                }
             }
         })
 

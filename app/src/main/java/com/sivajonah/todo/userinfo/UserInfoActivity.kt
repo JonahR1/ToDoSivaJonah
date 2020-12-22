@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
@@ -24,6 +25,7 @@ import coil.load
 import com.sivajonah.todo.BuildConfig
 import com.sivajonah.todo.R
 import com.sivajonah.todo.network.Api.userWebService
+import com.sivajonah.todo.network.UserInfo
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -40,6 +42,10 @@ class UserInfoActivity : AppCompatActivity() {
         val takePictureButton = this?.findViewById<Button>(R.id.take_picture_button)
         val pickPictureButton = this?.findViewById<Button>(R.id.upload_image_button)
         val imageView = this?.findViewById<ImageView>(R.id.image_view)
+        val updateButton = this?.findViewById<Button>(R.id.update_button)
+        val editName = this?.findViewById<TextView>(R.id.editName)
+        val editFirstName = this?.findViewById<TextView>(R.id.editFirstName)
+        val editMail = this?.findViewById<TextView>(R.id.editMail)
 
         takePictureButton?.setOnClickListener{
             askCameraPermissionAndOpenCamera()
@@ -49,8 +55,34 @@ class UserInfoActivity : AppCompatActivity() {
             pickImage()
         }
 
+        updateButton?.setOnClickListener {
+            val newUserInfo = UserInfo(
+                firstName = editFirstName.text.toString(),
+                lastName = editName.text.toString(),
+                email = editMail.text.toString(),
+                avatar = viewModel.userInfo.value!!.avatar)
+            viewModel.update(newUserInfo)
+        }
+
         viewModel.userInfo.observe(this, Observer { userInfo ->
-            imageView.load(userInfo.avatar)
+            // on check s'il y a besoin de reload chaque partie
+
+            if(editName.text != userInfo.lastName) {
+                editName.text = userInfo.lastName
+            }
+
+            if(editFirstName.text != userInfo.firstName) {
+                editFirstName.text = userInfo.firstName
+            }
+
+            if(editMail.text != userInfo.email) {
+                editMail.text = userInfo.email
+            }
+
+            if(imageView.tag != userInfo.avatar) {
+                imageView.load(userInfo.avatar)
+                imageView.tag = userInfo.avatar
+            }
         })
 
         lifecycleScope.launch {
