@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -107,7 +108,7 @@ class TaskListFragment : Fragment() {
             }
 
             // au cas ou l'image download ne fonctionne pas
-            if(imageView?.drawable == null) {
+            if(imageView?.isVisible == false) {
                 imageView?.load("https://goo.gl/gEgYUd") {
                     transformations(CircleCropTransformation())
                     size(250)
