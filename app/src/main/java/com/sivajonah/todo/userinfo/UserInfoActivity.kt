@@ -12,10 +12,14 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.LifecycleOwner
 import coil.load
 import com.sivajonah.todo.BuildConfig
 import com.sivajonah.todo.R
@@ -27,10 +31,11 @@ import java.io.File
 
 class UserInfoActivity : AppCompatActivity() {
 
+    private val viewModel: UserInfoViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_info)
-
 
         val takePictureButton = this?.findViewById<Button>(R.id.take_picture_button)
         val pickPictureButton = this?.findViewById<Button>(R.id.upload_image_button)
@@ -44,10 +49,12 @@ class UserInfoActivity : AppCompatActivity() {
             pickImage()
         }
 
+        viewModel.userInfo.observe(this, Observer { userInfo ->
+            imageView.load(userInfo.avatar)
+        })
+
         lifecycleScope.launch {
-            val userInfo = userWebService.getInfo().body()
-            imageView.load(userInfo?.avatar)
-            println("ON A CE QU'IL FAUT (OU PAS) " + userInfo?.avatar)
+            viewModel.getInfo()
         }
     }
 
@@ -86,7 +93,6 @@ class UserInfoActivity : AppCompatActivity() {
             this,
             BuildConfig.APPLICATION_ID +".fileprovider",
             File.createTempFile("avatar", ".jpeg", externalCacheDir)
-
         )
     }
 
@@ -109,11 +115,7 @@ class UserInfoActivity : AppCompatActivity() {
 
     private fun handleImage(uri: Uri) {
         lifecycleScope.launch{
-            val userInfo = userWebService.updateAvatar(convert(uri)).body()
-            val imageView = findViewById<ImageView>(R.id.image_view)
-            imageView.load(userInfo?.avatar)
-            println("ON A CE QU'IL FAUT (OU PAS) " + userInfo?.avatar)
-
+            viewModel.updateAvatar(convert(uri))
         }
     }
 

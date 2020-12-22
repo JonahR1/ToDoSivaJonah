@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -20,8 +21,11 @@ import com.sivajonah.todo.task.TaskActivity
 import kotlinx.coroutines.launch
 import androidx.lifecycle.Observer
 import coil.load
+import coil.transform.CircleCropTransformation
 import com.sivajonah.todo.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 import com.sivajonah.todo.userinfo.UserInfoActivity
+import com.sivajonah.todo.userinfo.UserInfoViewModel
+import okhttp3.internal.wait
 
 class TaskListFragment : Fragment() {
     /*private val taskList = mutableListOf(
@@ -30,17 +34,18 @@ class TaskListFragment : Fragment() {
         Task(id = "id_3", title = "Task 3")
     )*/
 
-    private val viewModel: TaskListViewModel by viewModels()
+    private val taskListViewModel: TaskListViewModel by viewModels()
+    private val userInfoViewModel: UserInfoViewModel by viewModels()
     val adapter = TaskListAdapter()
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == TaskActivity.ADD_TASK_REQUEST_CODE  && resultCode == Activity.RESULT_OK) {
             val task = data!!.getSerializableExtra(TaskActivity.TASK_KEY) as Task
-            viewModel.createTask(task)
+            taskListViewModel.createTask(task)
         } else if (requestCode == TaskActivity.EDIT_TASK_REQUEST_CODE  && resultCode == Activity.RESULT_OK) {
             val task = data!!.getSerializableExtra(TaskActivity.TASK_KEY) as Task
-            viewModel.updateTask(task)
+            taskListViewModel.updateTask(task)
         }
         super.onActivityResult(requestCode, resultCode, data)
     }
@@ -74,7 +79,7 @@ class TaskListFragment : Fragment() {
 
         // "implémentation" de la lambda dans le fragment:
         adapter.onDeleteClickListener = { task ->
-            viewModel.deleteTask(task)
+            taskListViewModel.deleteTask(task)
             adapter.notifyDataSetChanged()
         }
 
@@ -84,7 +89,7 @@ class TaskListFragment : Fragment() {
             startActivityForResult(intent, TaskActivity.EDIT_TASK_REQUEST_CODE)
         }
 
-        viewModel.taskList.observe(viewLifecycleOwner, Observer {
+        taskListViewModel.taskList.observe(viewLifecycleOwner, Observer {
             adapter.taskList = it.toMutableList()
             adapter.notifyDataSetChanged();
         })
@@ -92,30 +97,27 @@ class TaskListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        val imageView = view?.findViewById<ImageView>(R.id.imageView)
 
         // Ici on ne va pas gérer les cas d'erreur donc on force le crash avec "!!"
         lifecycleScope.launch {
-            val userInfo = Api.userWebService.getInfo().body()!!
-            view?.findViewById<TextView>(R.id.textView)?.text = "${userInfo.firstName} ${userInfo.lastName}"
-            viewModel.refresh()
+            userInfoViewModel.getInfo()!!
         }
 
-        val imageView = view?.findViewById<ImageView>(R.id.imageView)
+        userInfoViewModel.userInfo.observe(viewLifecycleOwner, Observer {
+            view?.findViewById<TextView>(R.id.textView)?.text = "${userInfoViewModel.userInfo.value?.firstName} ${userInfoViewModel.userInfo.value?.lastName}"
 
-        imageView?.load("https://goo.gl/gEgYUd")
-/*        val bitmap = imageView?.getDrawable()!!.toBitmap()
-        val imageRounded = Bitmap.createBitmap(bitmap.width, bitmap.height, bitmap.config)
-        val canvas = Canvas(imageRounded)
-        val paint = Paint()
-        paint.isAntiAlias = true
-        paint.shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
-        canvas.drawRoundRect(RectF(10F, 10F, bitmap.width.toFloat(), bitmap.height.toFloat()),
-            200F, 200F, paint) // Round Image Corner 100 100 100 100
-        imageView.setImageBitmap(imageRounded)*/
+            println(userInfoViewModel.userInfo.value?.avatar)
+
+            imageView?.load(userInfoViewModel.userInfo.value?.avatar) {
+                transformations(CircleCropTransformation())
+                size(400)
+            }
+        })
 
         imageView?.setOnClickListener {
             startActivity(Intent(activity, UserInfoActivity::class.java))
         }
-
+        taskListViewModel.refresh()
     }
 }
