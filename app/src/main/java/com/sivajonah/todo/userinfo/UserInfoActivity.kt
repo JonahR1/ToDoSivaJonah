@@ -24,7 +24,6 @@ import androidx.lifecycle.LifecycleOwner
 import coil.load
 import com.sivajonah.todo.BuildConfig
 import com.sivajonah.todo.R
-import com.sivajonah.todo.network.Api.userWebService
 import com.sivajonah.todo.network.UserInfo
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody

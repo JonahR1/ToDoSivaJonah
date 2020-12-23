@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -21,8 +22,11 @@ import com.sivajonah.todo.network.Api
 import com.sivajonah.todo.task.TaskActivity
 import kotlinx.coroutines.launch
 import androidx.lifecycle.Observer
+import androidx.preference.PreferenceManager
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.sivajonah.todo.authentication.AuthenticationActivity
+import com.sivajonah.todo.network.SHARED_PREF_TOKEN_KEY
 import com.sivajonah.todo.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 import com.sivajonah.todo.userinfo.UserInfoActivity
 import com.sivajonah.todo.userinfo.UserInfoViewModel
@@ -88,6 +92,13 @@ class TaskListFragment : Fragment() {
             adapter.taskList = it.toMutableList()
             adapter.notifyDataSetChanged();
         })
+
+        view.findViewById<FloatingActionButton>(R.id.disconnectButton).setOnClickListener {
+            PreferenceManager.getDefaultSharedPreferences(context).edit {
+                putString(SHARED_PREF_TOKEN_KEY, "")
+                startActivity(Intent(activity, AuthenticationActivity::class.java))
+            }
+        }
     }
 
     override fun onResume() {

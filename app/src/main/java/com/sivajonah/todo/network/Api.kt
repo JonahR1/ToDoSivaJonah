@@ -1,16 +1,24 @@
 package com.sivajonah.todo.network
 
+import android.content.Context
+import androidx.preference.PreferenceManager
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
-object Api {
+class Api (private val context: Context) {
 
     // constantes qui serviront à faire les requêtes
-    private const val BASE_URL = "https://android-tasks-api.herokuapp.com/api/"
-    private const val TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyODUsImV4cCI6MTYzODg4NTEyNX0.beHqGJSGFG-JtbrIg3hDAi_OOv8lISqwB9PcI80BrRU"
+    companion object {
+        private const val BASE_URL = "https://android-tasks-api.herokuapp.com/api/"
+        lateinit var INSTANCE: Api
+    }
+
+    fun getToken() : String? {
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(SHARED_PREF_TOKEN_KEY, "")
+    }
 
     // on construit une instance de parseur de JSON:
     private val jsonSerializer = Json {
@@ -28,7 +36,7 @@ object Api {
             .addInterceptor { chain ->
                 // intercepteur qui ajoute le `header` d'authentification avec votre token:
                 val newRequest = chain.request().newBuilder()
-                    .addHeader("Authorization", "Bearer $TOKEN")
+                    .addHeader("Authorization", "Bearer ${getToken()}")
                     .build()
                 chain.proceed(newRequest)
             }
