@@ -1,5 +1,8 @@
-package com.sivajonah.todo.network
+package com.sivajonah.todo.repository
 
+import com.sivajonah.todo.model.UserInfo
+import com.sivajonah.todo.network.Api
+import com.sivajonah.todo.webservice.UserWebService
 import okhttp3.MultipartBody
 
 class UserInfoRepository(private val userWebService : UserWebService = Api.INSTANCE.userWebService) :

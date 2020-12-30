@@ -1,5 +1,6 @@
-package com.sivajonah.todo.network
+package com.sivajonah.todo.model
 
+import com.sivajonah.todo.model.UserInfo
 import junit.framework.TestCase
 
 class UserInfoTest : TestCase() {

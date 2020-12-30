@@ -1,8 +1,7 @@
 package com.sivajonah.todo.data.source
 
-import com.sivajonah.todo.network.TasksWebService
-import com.sivajonah.todo.network.UserWebService
-import com.sivajonah.todo.tasklist.Task
+import com.sivajonah.todo.webservice.TasksWebService
+import com.sivajonah.todo.model.Task
 import retrofit2.Response
 import retrofit2.Response.success
 

@@ -1,10 +1,10 @@
 package com.sivajonah.todo.data.source
 
-import com.sivajonah.todo.authentication.LoginForm
-import com.sivajonah.todo.authentication.LoginResponse
-import com.sivajonah.todo.authentication.SignUpForm
-import com.sivajonah.todo.network.UserInfo
-import com.sivajonah.todo.network.UserWebService
+import com.sivajonah.todo.model.LoginForm
+import com.sivajonah.todo.model.LoginResponse
+import com.sivajonah.todo.model.SignUpForm
+import com.sivajonah.todo.model.UserInfo
+import com.sivajonah.todo.webservice.UserWebService
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.Response.success

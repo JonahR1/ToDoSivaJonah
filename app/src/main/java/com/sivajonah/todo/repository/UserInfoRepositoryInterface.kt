@@ -1,5 +1,6 @@
-package com.sivajonah.todo.network
+package com.sivajonah.todo.repository
 
+import com.sivajonah.todo.model.UserInfo
 import okhttp3.MultipartBody
 
 interface UserInfoRepositoryInterface {

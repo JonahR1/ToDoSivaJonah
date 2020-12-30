@@ -1,7 +1,7 @@
 package com.sivajonah.todo.data.source
 
-import com.sivajonah.todo.network.TasksRepositoryInterface
-import com.sivajonah.todo.tasklist.Task
+import com.sivajonah.todo.repository.TasksRepositoryInterface
+import com.sivajonah.todo.model.Task
 
 class FakeTasksRepository : TasksRepositoryInterface {
     var tasksServiceData: LinkedHashMap<String, Task> = LinkedHashMap()

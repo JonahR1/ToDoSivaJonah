@@ -1,12 +1,8 @@
-package com.sivajonah.todo.userinfo
+package com.sivajonah.todo.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.sivajonah.todo.data.source.FakeTasksRepository
 import com.sivajonah.todo.data.source.FakeUserInfoRepository
-import com.sivajonah.todo.network.UserInfo
-import com.sivajonah.todo.tasklist.TaskListViewModel
-import com.sivajonah.todo.tasklist.TaskListViewModelTest
-import junit.framework.TestCase
+import com.sivajonah.todo.model.UserInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.*

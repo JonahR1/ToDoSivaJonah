@@ -1,6 +1,6 @@
-package com.sivajonah.todo.network
+package com.sivajonah.todo.webservice
 
-import com.sivajonah.todo.tasklist.Task
+import com.sivajonah.todo.model.Task
 import retrofit2.Response
 import retrofit2.http.*
 

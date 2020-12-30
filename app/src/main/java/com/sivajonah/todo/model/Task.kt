@@ -1,4 +1,4 @@
-package com.sivajonah.todo.tasklist
+package com.sivajonah.todo.model
 import java.io.Serializable
 import kotlinx.serialization.SerialName
 

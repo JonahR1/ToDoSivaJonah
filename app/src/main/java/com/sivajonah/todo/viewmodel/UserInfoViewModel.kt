@@ -1,12 +1,12 @@
-package com.sivajonah.todo.userinfo;
+package com.sivajonah.todo.viewmodel;
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sivajonah.todo.network.UserInfo;
-import com.sivajonah.todo.network.UserInfoRepository;
-import com.sivajonah.todo.network.UserInfoRepositoryInterface
+import com.sivajonah.todo.model.UserInfo;
+import com.sivajonah.todo.repository.UserInfoRepository;
+import com.sivajonah.todo.repository.UserInfoRepositoryInterface
 import kotlinx.coroutines.launch
 
 import okhttp3.MultipartBody;

@@ -1,4 +1,4 @@
-package com.sivajonah.todo.authentication
+package com.sivajonah.todo.model
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerialName

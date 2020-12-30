@@ -1,6 +1,6 @@
-package com.sivajonah.todo.network
+package com.sivajonah.todo.repository
 
-import com.sivajonah.todo.tasklist.Task
+import com.sivajonah.todo.model.Task
 
 interface TasksRepositoryInterface {
     suspend fun refresh(): List<Task>?

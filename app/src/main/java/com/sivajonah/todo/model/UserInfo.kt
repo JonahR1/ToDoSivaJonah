@@ -1,4 +1,4 @@
-package com.sivajonah.todo.network
+package com.sivajonah.todo.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

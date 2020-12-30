@@ -1,11 +1,12 @@
-package com.sivajonah.todo.tasklist
+package com.sivajonah.todo.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sivajonah.todo.network.TasksRepository
-import com.sivajonah.todo.network.TasksRepositoryInterface
+import com.sivajonah.todo.model.Task
+import com.sivajonah.todo.repository.TasksRepository
+import com.sivajonah.todo.repository.TasksRepositoryInterface
 import kotlinx.coroutines.launch
 
 class TaskListViewModel(private val tasksRepository: TasksRepositoryInterface = TasksRepository()): ViewModel() {
@@ -18,7 +19,7 @@ class TaskListViewModel(private val tasksRepository: TasksRepositoryInterface = 
         }
     }
 
-    fun updateTask(task:Task) {
+    fun updateTask(task: Task) {
         viewModelScope.launch {
             tasksRepository.updateTask(task)?.let { task ->
                 val editableList = _taskList.value.orEmpty().toMutableList()
@@ -29,7 +30,7 @@ class TaskListViewModel(private val tasksRepository: TasksRepositoryInterface = 
         }
     }
 
-    fun createTask(task:Task) {
+    fun createTask(task: Task) {
         viewModelScope.launch {
             tasksRepository.createTask(task)?.let { task ->
                 val editableList = _taskList.value.orEmpty().toMutableList()
@@ -39,7 +40,7 @@ class TaskListViewModel(private val tasksRepository: TasksRepositoryInterface = 
         }
     }
 
-    fun deleteTask(task:Task) {
+    fun deleteTask(task: Task) {
         viewModelScope.launch {
             if (tasksRepository.deleteTask(task)) {
                 val editableList = _taskList.value.orEmpty().toMutableList()

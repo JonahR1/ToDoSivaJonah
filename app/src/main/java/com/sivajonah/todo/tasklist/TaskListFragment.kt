@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -18,19 +17,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.sivajonah.todo.R
-import com.sivajonah.todo.network.Api
-import com.sivajonah.todo.task.TaskActivity
+import com.sivajonah.todo.tasklist.TaskActivity
 import kotlinx.coroutines.launch
 import androidx.lifecycle.Observer
 import androidx.preference.PreferenceManager
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.sivajonah.todo.authentication.AuthenticationActivity
+import com.sivajonah.todo.model.Task
 import com.sivajonah.todo.network.SHARED_PREF_TOKEN_KEY
-import com.sivajonah.todo.task.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
+import com.sivajonah.todo.tasklist.TaskActivity.Companion.ADD_TASK_REQUEST_CODE
 import com.sivajonah.todo.userinfo.UserInfoActivity
-import com.sivajonah.todo.userinfo.UserInfoViewModel
-import okhttp3.internal.wait
+import com.sivajonah.todo.viewmodel.TaskListViewModel
+import com.sivajonah.todo.viewmodel.UserInfoViewModel
 
 class TaskListFragment : Fragment() {
     private val taskListViewModel: TaskListViewModel by viewModels()

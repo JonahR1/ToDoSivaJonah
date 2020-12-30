@@ -1,8 +1,9 @@
-package com.sivajonah.todo.network
+package com.sivajonah.todo.webservice
 
-import com.sivajonah.todo.authentication.LoginForm
-import com.sivajonah.todo.authentication.LoginResponse
-import com.sivajonah.todo.authentication.SignUpForm
+import com.sivajonah.todo.model.LoginForm
+import com.sivajonah.todo.model.LoginResponse
+import com.sivajonah.todo.model.SignUpForm
+import com.sivajonah.todo.model.UserInfo
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*

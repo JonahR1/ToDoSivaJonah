@@ -1,4 +1,4 @@
-package com.sivajonah.todo.task
+package com.sivajonah.todo.tasklist
 
 import android.app.Activity
 import android.os.Bundle
@@ -6,7 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import com.sivajonah.todo.R
-import com.sivajonah.todo.tasklist.Task
+import com.sivajonah.todo.model.Task
 import java.util.*
 
 class TaskActivity : AppCompatActivity() {

@@ -1,7 +1,8 @@
-package com.sivajonah.todo.network
+package com.sivajonah.todo.repository
 
-import com.sivajonah.todo.data.source.FakeTasksDataSource
 import com.sivajonah.todo.data.source.FakeUserInfoDataSource
+import com.sivajonah.todo.model.UserInfo
+import com.sivajonah.todo.repository.UserInfoRepository
 import junit.framework.TestCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest

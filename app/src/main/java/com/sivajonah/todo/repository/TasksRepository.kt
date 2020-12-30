@@ -1,6 +1,8 @@
-package com.sivajonah.todo.network
+package com.sivajonah.todo.repository
 
-import com.sivajonah.todo.tasklist.Task
+import com.sivajonah.todo.model.Task
+import com.sivajonah.todo.network.Api
+import com.sivajonah.todo.webservice.TasksWebService
 
 class TasksRepository (private val tasksWebService: TasksWebService = Api.INSTANCE.tasksWebService) :
     TasksRepositoryInterface {

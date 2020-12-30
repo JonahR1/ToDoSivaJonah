@@ -1,12 +1,9 @@
-package com.sivajonah.todo.tasklist
+package com.sivajonah.todo.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.sivajonah.todo.data.source.FakeTasksRepository
-import junit.framework.TestCase
 import junit.framework.TestCase.assertEquals
-import androidx.lifecycle.viewModelScope
+import com.sivajonah.todo.model.Task
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
 import org.junit.*

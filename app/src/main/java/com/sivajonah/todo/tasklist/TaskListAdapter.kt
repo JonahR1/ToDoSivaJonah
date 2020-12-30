@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sivajonah.todo.R
+import com.sivajonah.todo.model.Task
 
 
 class TaskListAdapter() : ListAdapter<Task, TaskListAdapter.TaskViewHolder>(DIFF_CALLBACK) {

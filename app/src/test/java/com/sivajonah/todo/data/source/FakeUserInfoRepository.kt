@@ -1,7 +1,7 @@
 package com.sivajonah.todo.data.source
 
-import com.sivajonah.todo.network.UserInfo
-import com.sivajonah.todo.network.UserInfoRepositoryInterface
+import com.sivajonah.todo.model.UserInfo
+import com.sivajonah.todo.repository.UserInfoRepositoryInterface
 import okhttp3.MultipartBody
 
 class FakeUserInfoRepository : UserInfoRepositoryInterface {

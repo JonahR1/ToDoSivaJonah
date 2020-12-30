@@ -3,6 +3,8 @@ package com.sivajonah.todo.network
 import android.content.Context
 import androidx.preference.PreferenceManager
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.sivajonah.todo.webservice.TasksWebService
+import com.sivajonah.todo.webservice.UserWebService
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
