@@ -45,7 +45,7 @@ class TaskListViewModelTest {
 
         @AfterClass
         @JvmStatic
-        fun finish() {
+        fun teardown() {
             Dispatchers.resetMain()
             // Reset Coroutine Dispatcher and Scope.
             testDispatcher.cleanupTestCoroutines()

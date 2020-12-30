@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class UserInfo(
     @SerialName("email")
-    val email: String,
+    var email: String,
     @SerialName("firstname")
-    val firstName: String,
+    var firstName: String,
     @SerialName("lastname")
-    val lastName: String,
+    var lastName: String,
     @SerialName("avatar")
-    val avatar: String = "https://goo.gl/gEgYUd"
+    var avatar: String = "https://goo.gl/gEgYUd"
 )

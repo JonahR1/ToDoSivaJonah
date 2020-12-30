@@ -2,9 +2,7 @@ package com.sivajonah.todo.network
 
 import okhttp3.MultipartBody
 
-class UserInfoRepository {
-    private val userWebService = Api.INSTANCE.userWebService
-
+class UserInfoRepository(private val userWebService : UserWebService = Api.INSTANCE.userWebService) {
     suspend fun getInfo(): UserInfo? {
         val response = userWebService.getInfo()
         return if(response.isSuccessful) response.body() else null
