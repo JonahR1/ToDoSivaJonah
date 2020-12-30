@@ -31,6 +31,10 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+
+    testOptions {
+        unitTests.returnDefaultValues = false
+    }
 }
 
 dependencies {
@@ -60,8 +64,8 @@ dependencies {
     implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0'
 
     // Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
 
     // Lifecycle
     implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
@@ -74,4 +78,6 @@ dependencies {
     implementation "androidx.core:core-ktx:1.1.0"
     implementation "androidx.navigation:navigation-fragment-ktx:2.1.0"
     implementation "androidx.navigation:navigation-ui-ktx:2.1.0"
+
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion"
 }

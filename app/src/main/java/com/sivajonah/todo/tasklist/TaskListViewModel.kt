@@ -5,15 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sivajonah.todo.network.TasksRepository
+import com.sivajonah.todo.network.TasksRepositoryInterface
 import kotlinx.coroutines.launch
 
-class TaskListViewModel: ViewModel() {
+class TaskListViewModel(private val tasksRepository: TasksRepositoryInterface = TasksRepository()): ViewModel() {
     private val _taskList = MutableLiveData<List<Task>>()
-    public val taskList: LiveData<List<Task>> = _taskList
-    private val tasksRepository = TasksRepository()
+    val taskList: LiveData<List<Task>> = _taskList
 
     fun refresh() {
         viewModelScope.launch {
+            println("kekou ?")
             _taskList.value = tasksRepository.refresh()
         }
     }
