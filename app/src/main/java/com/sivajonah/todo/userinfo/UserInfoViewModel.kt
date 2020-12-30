@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sivajonah.todo.network.UserInfo;
 import com.sivajonah.todo.network.UserInfoRepository;
+import com.sivajonah.todo.network.UserInfoRepositoryInterface
 import kotlinx.coroutines.launch
 
 import okhttp3.MultipartBody;
 
-class UserInfoViewModel: ViewModel() {
+class UserInfoViewModel(private val userInfoRepository : UserInfoRepositoryInterface = UserInfoRepository()): ViewModel() {
     private val _userInfo = MutableLiveData<UserInfo>()
-    public val userInfo: LiveData<UserInfo> = _userInfo
-    private val userInfoRepository = UserInfoRepository()
+    val userInfo: LiveData<UserInfo> = _userInfo
 
     fun getInfo() {
         viewModelScope.launch {

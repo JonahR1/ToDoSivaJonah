@@ -2,18 +2,19 @@ package com.sivajonah.todo.network
 
 import okhttp3.MultipartBody
 
-class UserInfoRepository(private val userWebService : UserWebService = Api.INSTANCE.userWebService) {
-    suspend fun getInfo(): UserInfo? {
+class UserInfoRepository(private val userWebService : UserWebService = Api.INSTANCE.userWebService) :
+    UserInfoRepositoryInterface {
+    override suspend fun getInfo(): UserInfo? {
         val response = userWebService.getInfo()
         return if(response.isSuccessful) response.body() else null
     }
 
-    suspend fun updateAvatar(avatar: MultipartBody.Part) : UserInfo? {
+    override suspend fun updateAvatar(avatar: MultipartBody.Part) : UserInfo? {
         val response = userWebService.updateAvatar(avatar)
         return if(response.isSuccessful) response.body() else null
     }
 
-    suspend fun update(user: UserInfo) : UserInfo? {
+    override suspend fun update(user: UserInfo) : UserInfo? {
         val response = userWebService.update(user)
         return if(response.isSuccessful) response.body() else null
     }

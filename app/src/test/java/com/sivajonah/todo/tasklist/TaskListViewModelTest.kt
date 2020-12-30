@@ -40,7 +40,7 @@ class TaskListViewModelTest {
         @JvmStatic
         fun setup() {
             /* Set Coroutine Dispatcher. */
-            Dispatchers.setMain(TaskListViewModelTest.testDispatcher)
+            Dispatchers.setMain(testDispatcher)
         }
 
         @AfterClass

@@ -33,7 +33,7 @@ class FakeUserInfoDataSource(var userInfo: UserInfo?) : UserWebService {
 
     override suspend fun update(user: UserInfo): Response<UserInfo> {
         userInfo?.let {
-            userInfo = user
+            userInfo = user.copy()
             return success(userInfo)
         }
         return error(

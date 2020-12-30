@@ -1,13 +1,10 @@
 package com.sivajonah.todo.data.source
 
-import androidx.lifecycle.MutableLiveData
 import com.sivajonah.todo.network.TasksRepositoryInterface
 import com.sivajonah.todo.tasklist.Task
 
 class FakeTasksRepository : TasksRepositoryInterface {
     var tasksServiceData: LinkedHashMap<String, Task> = LinkedHashMap()
-
-    private val observableTasks = MutableLiveData<Result<List<Task>>>()
 
     override suspend fun refresh(): List<Task>? {
         return tasksServiceData.values.toList()
