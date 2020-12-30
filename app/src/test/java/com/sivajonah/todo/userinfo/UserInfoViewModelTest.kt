@@ -57,7 +57,7 @@ class UserInfoViewModelTest {
     }
 
     @Test
-    fun test_2_updateAvatar() {
+    fun test_2_updateAvatar() = runBlockingTest {
         val newAvatar =  MultipartBody.Part.createFormData(
             name = "avatar",
             filename = "supertest.png",
@@ -73,7 +73,7 @@ class UserInfoViewModelTest {
     }
 
     @Test
-    fun test_3_update() {
+    fun test_3_update() = runBlockingTest {
         val newUserInfo = userInfo.copy()
         newUserInfo.email = "TEST@test.fr"
         newUserInfo.avatar = "supertest.png"
