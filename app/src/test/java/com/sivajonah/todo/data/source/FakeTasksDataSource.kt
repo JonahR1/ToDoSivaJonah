@@ -1,11 +1,12 @@
 package com.sivajonah.todo.data.source
 
 import com.sivajonah.todo.network.TasksWebService
+import com.sivajonah.todo.network.UserWebService
 import com.sivajonah.todo.tasklist.Task
 import retrofit2.Response
 import retrofit2.Response.success
 
-class FakeDataSource (var tasks: MutableList<Task>? = mutableListOf()): TasksWebService {
+class FakeTasksDataSource (var tasks: MutableList<Task>? = mutableListOf()): TasksWebService {
     override suspend fun getTasks(): Response<List<Task>> {
         tasks?.let { return success(ArrayList(it)) }
         return error(

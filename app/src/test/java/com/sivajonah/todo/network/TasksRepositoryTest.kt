@@ -1,6 +1,6 @@
 package com.sivajonah.todo.network
 
-import com.sivajonah.todo.data.source.FakeDataSource
+import com.sivajonah.todo.data.source.FakeTasksDataSource
 import com.sivajonah.todo.tasklist.Task
 import junit.framework.TestCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -17,8 +17,8 @@ class TasksRepositoryTest : TestCase() {
     private val task4 = Task("4", "4th Task", "Do 4th Task")
     private val tasks = listOf(task1, task2, task3)
 
-    private var tasksDataSource: FakeDataSource = FakeDataSource(tasks.toMutableList())
-    private var tasksRepository: TasksRepository = TasksRepository(tasksDataSource)
+    private var tasksTasksDataSource: FakeTasksDataSource = FakeTasksDataSource(tasks.toMutableList())
+    private var tasksRepository: TasksRepository = TasksRepository(tasksTasksDataSource)
 
     fun test_1_Refresh() = runBlockingTest {
         val tasksResult = tasksRepository.refresh()
@@ -29,13 +29,13 @@ class TasksRepositoryTest : TestCase() {
     fun test_2_CreateTask() = runBlockingTest {
         tasksRepository.createTask(task4)
 
-        assertEquals(listOf(task1, task2, task3, task4), tasksDataSource.tasks?.toList())
+        assertEquals(listOf(task1, task2, task3, task4), tasksTasksDataSource.tasks?.toList())
     }
 
     fun test_3_DeleteTask() = runBlockingTest {
         tasksRepository.deleteTask(task1)
 
-        assertEquals(listOf(task2, task3), tasksDataSource.tasks?.toList())
+        assertEquals(listOf(task2, task3), tasksTasksDataSource.tasks?.toList())
     }
 
     fun test_4_UpdateTask() = runBlockingTest  {
@@ -43,6 +43,6 @@ class TasksRepositoryTest : TestCase() {
         task1.description = task4.description
         tasksRepository.updateTask(task1)
 
-        assertEquals(listOf(task1, task2, task3), tasksDataSource.tasks?.toList())
+        assertEquals(listOf(task1, task2, task3), tasksTasksDataSource.tasks?.toList())
     }
 }
