@@ -14,7 +14,6 @@ class TaskListViewModel(private val tasksRepository: TasksRepositoryInterface = 
 
     fun refresh() {
         viewModelScope.launch {
-            println("kekou ?")
             _taskList.value = tasksRepository.refresh()
         }
     }
