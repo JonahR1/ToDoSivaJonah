@@ -5,10 +5,11 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.UiController
+import androidx.test.espresso.ViewAction
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
-import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItem
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -18,7 +19,7 @@ import com.sivajonah.todo.authentication.AuthenticationActivity
 import com.sivajonah.todo.authentication.LoginFragment
 import org.hamcrest.Description
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.allOf
+import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.FixMethodOrder
 import org.junit.Rule
@@ -37,6 +38,7 @@ class UiTest {
     private lateinit var nom_prenom: String
     private lateinit var titre: String
     private lateinit var description: String
+    private lateinit var titreBis: String
 
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -53,6 +55,8 @@ class UiTest {
 
         titre = "Test UI"
         description = "Ceci est un test UI"
+
+        titreBis = "Test UI edite"
     }
 
     @Test
@@ -94,15 +98,67 @@ class UiTest {
             .check(matches(atPosition(1, hasDescendant(withText(titre)))));
     }
 
-    /*@Test
-    fun C_delete() {
-        onView(allOf(withId(R.id.recycler_view), isDisplayed()))
-            .perform(actionOnItem(withChild(with("Foobar")), click()));
-    }*/
+    @Test
+    fun C_edit() {
+        onView(withId(R.id.recycler_view))
+            .perform(RecyclerViewActions
+                .actionOnItemAtPosition<RecyclerView.ViewHolder>(1,clickItemWithId(R.id.editButton)))
+
+        onView(withId(R.id.titre))
+            .perform(replaceText(titreBis), closeSoftKeyboard())
+
+        Thread.sleep(500)
+
+        onView(withId(R.id.valider)).perform(click())
+
+        Thread.sleep(5000)
+
+        onView(withId(R.id.recycler_view))
+            .check(matches(atPosition(1, hasDescendant(withText(titreBis)))));
+    }
 
     @Test
-    fun C_disconnect() {
+    fun D_delete() {
+        Thread.sleep(1000)
+
+        onView(withId(R.id.recycler_view))
+            .perform(RecyclerViewActions
+                .actionOnItemAtPosition<RecyclerView.ViewHolder>(1,clickItemWithId(R.id.imageButton)))
+
+        Thread.sleep(1000)
+
+        onView(withId(R.id.recycler_view))
+            .check(matches(not(atPosition(1, hasDescendant(withText(titreBis))))));
+
+        //onView(withId(R.id.recycler_view)).check(matches(not(hasItem(hasDescendant(withText(titre))))));
+
+    }
+
+    @Test
+    fun E_disconnect() {
         onView(withId(R.id.disconnectButton)).perform(click())
+
+        Thread.sleep(5000)
+
+        onView(withId(R.id.nav_host_fragment))
+            .check(matches(isDisplayed()))
+    }
+
+    fun clickItemWithId(id: Int): ViewAction {
+        return object : ViewAction {
+            override fun getConstraints(): Matcher<View>? {
+                return null
+            }
+
+            override fun getDescription(): String {
+                return "Click on a child view with specified id."
+            }
+
+            override fun perform(uiController: UiController, view: View) {
+                val v = view.findViewById<View>(id) as View
+                v.performClick()
+            }
+        }
     }
 
     fun atPosition(position: Int, itemMatcher: Matcher<View?>): Matcher<View?>? {
