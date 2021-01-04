@@ -5,7 +5,7 @@ import com.sivajonah.todo.model.Task
 import retrofit2.Response
 import retrofit2.Response.success
 
-class FakeTasksDataSource (var tasks: MutableList<Task>? = mutableListOf()): TasksWebService {
+class FakeTasksWebService (var tasks: MutableList<Task>? = mutableListOf()): TasksWebService {
     override suspend fun getTasks(): Response<List<Task>> {
         tasks?.let { return success(ArrayList(it)) }
         return error(

@@ -9,7 +9,7 @@ import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.Response.success
 
-class FakeUserInfoDataSource(var userInfo: UserInfo?) : UserWebService {
+class FakeUserWebService(var userInfo: UserInfo?) : UserWebService {
     override suspend fun getInfo(): Response<UserInfo> {
         userInfo?.let {
             return success(userInfo)
